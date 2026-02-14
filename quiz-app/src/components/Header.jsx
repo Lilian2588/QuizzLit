@@ -1,0 +1,73 @@
+import { useState } from 'react'
+
+export default function Header({ onHome, showHomeButton = false}) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const closeMenu = () => setIsMenuOpen(false)
+
+  return (
+    <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
+      <div className="max-w-md mx-auto px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* Bouton Hamburger */}
+            <button
+              onClick={toggleMenu}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative"
+              aria-label="Menu"
+            >
+              <div className="space-y-1">
+                <span className="block w-5 h-0.5 bg-gray-600"></span>
+                <span className="block w-5 h-0.5 bg-gray-600"></span>
+                <span className="block w-5 h-0.5 bg-gray-600"></span>
+              </div>
+            </button>
+            
+            {/* Menu déroulant */}
+            {isMenuOpen && (
+              <div className="absolute top-full left-4 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50 animate-in fade-in-0 zoom-in-95 duration-200">
+                <button
+                  onClick={() => {
+                    onHome()
+                    closeMenu()
+                  }}
+                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                >
+                   Accueil
+                </button>
+                <button
+                  onClick={() => {
+                    onHome()
+                    closeMenu()
+                  }}
+                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                >
+                   Progression
+                </button>                
+              </div>
+            )}
+
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <span className="text-white text-sm font-bold">𝒬</span>
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-800">QuizzLit</h1>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">                      
+            {showHomeButton && (
+              <button
+                onClick={onHome}
+                className="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 text-red-700 rounded-lg hover:bg-red-100 transition-colors"
+              >
+                <span className="text-sm font-medium">Quitter</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
+  )
+}
