@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function Header({ onHome, showHomeButton = false}) {
+export default function Header({ onHome, onProgression, showHomeButton}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
@@ -38,13 +38,13 @@ export default function Header({ onHome, showHomeButton = false}) {
                 </button>
                 <button
                   onClick={() => {
-                    onHome()
+                    onProgression()
                     closeMenu()
                   }}
                   className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                 >
                    Progression
-                </button>                
+                </button>
               </div>
             )}
 
@@ -52,7 +52,7 @@ export default function Header({ onHome, showHomeButton = false}) {
               <span className="text-white text-sm font-bold">𝒬</span>
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gray-800">QuizzLit</h1>
+              <h1 className="text-lg font-black text-blue-900">𝒬𝓊𝒾𝔃𝔃𝓛𝒾𝓉</h1>
             </div>
           </div>
           
