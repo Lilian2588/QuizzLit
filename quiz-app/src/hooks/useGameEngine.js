@@ -12,6 +12,9 @@ export function useGameEngine(questions) {
 
   // --- 2. LES ACTIONS DU JOUEUR ---
   const startGame = () => {
+    setCurrentIndex(0)
+    setScore(0)
+    setFeedback(null)
     setGameState('playing')
   }
 
@@ -36,21 +39,31 @@ export function useGameEngine(questions) {
     }
   }
 
-  const nextQuestion = () => {
-    setFeedback(null)
+  const nextQuestion = (config) => {
     // Si on est à la dernière question, on termine
     if (currentIndex + 1 >= questions.length) {
-      setGameState('finished')
-    } else {
+      onSkipToEnd()
+    } 
+    // Si on est en mode progression et qu'on a eu une mauvaise réponse, on termine
+    else if (feedback === 'error' && config && config.mode === "progression") {
+      onSkipToEnd()
+    } 
+    else {
       setCurrentIndex(i => i + 1)
     }
+    setFeedback(null)
   }
 
-  const restartGame = () => {
-    setCurrentIndex(0)
-    setScore(0)
-    setFeedback(null)
-    setGameState('home')
+  // Message de fin personnalisé
+  const getMessage = (score) => {
+    if (score === questions.length && questions.length > 0) return "T'es parfaite ! 💍";
+    if (score / questions.length >= 0.5) return "Tu pourrais mieux faire quand même je sais pas ! 🤷‍♂️";
+    return "Culturée, mmmh... laisse moi rire ! 🤠";
+  };
+
+  const onSkipToEnd = () => {
+    // Passer directement à l'écran de fin
+    setGameState('finished')
   }
 
   // --- 3. ON EXPORTE CE QUI EST UTILE À L'INTERFACE ---
@@ -63,6 +76,7 @@ export function useGameEngine(questions) {
     startGame,
     handleAnswer,
     nextQuestion,
-    restartGame
+    getMessage,
+    onSkipToEnd 
   }
 }

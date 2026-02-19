@@ -1,19 +1,39 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 
-export function useQuestions() {
+export function useQuestions(config, reloadTrigger = 0) {
   const [questions, setQuestions] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false) 
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (!config) return
+
     const fetchQuestions = async () => {
+      setIsLoading(true)
+      setError(null)
       try {
-        const { data, error } = await supabase.from('questions').select('*')
-        if (error) throw error
+        let query = supabase.from('questions').select('*')
+
+        // Filtres dynamiques
+        if (config.themes && config.themes.length > 0) query = query.in('theme', config.themes)
+        if (config.types && config.types.length > 0) query = query.in('question_type', config.types)
         
-        // On mélange les questions dès la réception
-        setQuestions(data.sort(() => Math.random() - 0.5))
+        // Filtre de difficulté pour la carte de progression
+        if (config.difficulty) query = query.eq('difficulty', config.difficulty)
+
+        const { data, error } = await query
+        if (error) throw error
+
+        let processedData = [...data]
+        
+        // On mélange aléatoirement
+        processedData.sort(() => Math.random() - 0.5)
+
+        // On coupe à 15 questions maximum par partie !
+        processedData = processedData.slice(0, 15)
+
+        setQuestions(processedData)
       } catch (err) {
         console.error('Erreur Supabase:', err)
         setError(err.message)
@@ -23,7 +43,7 @@ export function useQuestions() {
     }
 
     fetchQuestions()
-  }, [])
+  }, [config, reloadTrigger])
 
   return { questions, isLoading, error }
 }
