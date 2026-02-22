@@ -16,9 +16,11 @@ export function useAppLogic() {
   const { gameConfig, isLoading, error, questions, engine, launchSession, replaySession, quitSession} = useGameSession()
   const { completedLevels, markLevelCompleted } = useProgression()
   const [showMap, setShowMap] = useState(false)
+  const [showEndProgression, setShowEndProgression] = useState(false)
   
   const handleShowProgression = () => {
     quitSession() 
+    setShowEndProgression(false)
     setShowMap(true)
   }
   
@@ -29,18 +31,24 @@ export function useAppLogic() {
 
   const handleLaunchFromMap = (levelConfig) => {
     setShowMap(false)
+    setShowEndProgression(false)
     launchSession(levelConfig)
   }
 
   const handleReturnToMenu = () => {
     quitSession()
     setShowMap(false)
+    setShowEndProgression(false)
   }
 
-  // --- LOGIQUE DU "PALIER SUIVANT" ---
+  const goToEndProgressionScreen = () =>{
+    quitSession()
+    setShowEndProgression(true)
+  } 
+
   let hasNextLevel = false
   let handleNextLevel = null
-
+  // --- LOGIQUE DU "PALIER SUIVANT" ---
   // Si on est en mode progression et qu'on connaît le niveau actuel (ex: "CINEMA_BEGINNER_QCM")
   if (gameConfig && gameConfig.mode === 'progression' && gameConfig.levelId) {
     const [theme, diff, type] = gameConfig.levelId.split('_') // On découpe l'ID
@@ -64,6 +72,9 @@ export function useAppLogic() {
           levelId: nextLevelId
         })
       }
+    } else {
+      // C'est le dernier palier du thème - on peut aller à l'écran de fin de progression
+      goToEndProgressionScreen()
     }
   }
 
@@ -71,6 +82,7 @@ export function useAppLogic() {
     gameConfig, isLoading, error, questions, engine,
     completedLevels, markLevelCompleted, showMap,
     handleHomeStart, handleLaunchFromMap, handleReturnToMenu, replaySession,
-    hasNextLevel, handleNextLevel, handleShowProgression
+    hasNextLevel, handleNextLevel, handleShowProgression,
+    showEndProgression, goToEndProgressionScreen
   }
 }

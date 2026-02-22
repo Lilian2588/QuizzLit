@@ -18,35 +18,34 @@ export default function Header({ onHome, onProgression, showHomeButton}) {
               aria-label="Menu"
             >
               <div className="space-y-1">
-                <span className="block w-5 h-0.5 bg-gray-600"></span>
-                <span className="block w-5 h-0.5 bg-gray-600"></span>
-                <span className="block w-5 h-0.5 bg-gray-600"></span>
+                <span className={`block w-5 h-0.5 bg-gray-600 transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+                <span className={`block w-5 h-0.5 bg-gray-600 transition-all duration-300 ${isMenuOpen ? 'opacity-0 scale-x-0' : ''}`}></span>
+                <span className={`block w-5 h-0.5 bg-gray-600 transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
               </div>
             </button>
             
             {/* Menu déroulant */}
-            {isMenuOpen && (
-              <div className="absolute top-full left-4 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50 animate-in fade-in-0 zoom-in-95 duration-200">
-                <button
-                  onClick={() => {
-                    onHome()
-                    closeMenu()
-                  }}
-                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-                >
-                   Accueil
-                </button>
-                <button
-                  onClick={() => {
-                    onProgression()
-                    closeMenu()
-                  }}
-                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-                >
-                   Progression
-                </button>
-              </div>
-            )}
+            <div className={`absolute top-full left-4 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50 transition-all duration-300 overflow-hidden
+              ${isMenuOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 pointer-events-none border-0 shadow-none py-0'}`}>
+              <button
+                onClick={() => {
+                  onHome()
+                  closeMenu()
+                }}
+                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+              >
+                 Accueil
+              </button>
+              <button
+                onClick={() => {
+                  onProgression()
+                  closeMenu()
+                }}
+                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+              >
+                 Progression
+              </button>
+            </div>
 
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
               <span className="text-white text-sm font-bold">𝒬</span>

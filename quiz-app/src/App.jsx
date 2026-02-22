@@ -3,14 +3,15 @@ import HomeScreen from './components/HomeScreen'
 import ProgressionDashboard from './components/ProgressionDashboard'
 import GameScreen from './components/GameScreen'
 import EndScreen from './components/EndScreen'
+import EndProgressionScreen from './components/EndProgressionScreen'
 
 function App() {
   // 100% de la logique est ici, dans un seul Hook !
   const {
     gameConfig, isLoading, error, questions, engine,
-    completedLevels, markLevelCompleted, showMap,
+    completedLevels, markLevelCompleted, showMap, showEndProgression,
     handleHomeStart, handleLaunchFromMap, handleReturnToMenu, replaySession,
-    hasNextLevel, handleNextLevel, handleShowProgression
+    hasNextLevel, handleNextLevel, handleShowProgression, goToEndProgressionScreen
   } = useAppLogic()
 
   return (
@@ -18,12 +19,16 @@ function App() {
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden min-h-[600px] flex flex-col relative border border-gray-100">
         
         {/* 1. ACCUEIL */}
-        {!gameConfig && !showMap && (
-          <HomeScreen onStart={handleHomeStart} />
+        {!gameConfig && !showMap && !showEndProgression &&(
+          <HomeScreen 
+            onStart={handleHomeStart} 
+            GoMenu={handleReturnToMenu}
+            handleShowProgression={handleShowProgression}
+          />
         )}
 
         {/* 2. LA CARTE DE PROGRESSION */}
-        {!gameConfig && showMap && (
+        {!gameConfig && showMap && !showEndProgression &&(
           <ProgressionDashboard 
             completedLevels={completedLevels} 
             onLaunchLevel={handleLaunchFromMap}
@@ -57,7 +62,7 @@ function App() {
             score={engine.score}
             feedback={engine.feedback}
             handleAnswer={engine.handleAnswer}
-            nextQuestion={engine.nextQuestion}
+            nextQuestion={() => engine.nextQuestion(gameConfig)}
             GoMenu={handleReturnToMenu} 
             handleShowProgression={handleShowProgression}
             onSkipToEnd={engine.onSkipToEnd}
@@ -71,12 +76,22 @@ function App() {
             total={questions.length} 
             levelId={gameConfig.levelId}
             markLevelCompleted={markLevelCompleted}
-            hasNextLevel={hasNextLevel}          // On passe nos nouvelles props !
-            onNextLevel={handleNextLevel}         
+            hasNextLevel={hasNextLevel}   
+            onNextLevel={handleNextLevel}       
             onReplay={replaySession} 
             handleShowProgression={handleShowProgression}
             GoMenu={handleReturnToMenu} 
             getMessage={engine.getMessage}
+            getReaction={engine.getReaction}
+            goToEndProgressionScreen={goToEndProgressionScreen}
+          />
+        )}
+
+        {/* 7. ÉCRAN DE FIN DE PROGRESSION */}
+        {showEndProgression && (
+          <EndProgressionScreen 
+            GoMenu={handleReturnToMenu}
+            handleShowProgression={handleShowProgression}
           />
         )}
 

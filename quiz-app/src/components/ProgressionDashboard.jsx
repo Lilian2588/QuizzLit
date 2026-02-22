@@ -3,7 +3,7 @@ import { PROGRESSION_STRUCTURE } from '../hooks/useAppLogic'
 import Header from './Header'
 
 
-export default function ProgressionDashboard({ completedLevels, onLaunchLevel, GoMenu, handleShowProgression }) {
+export default function ProgressionDashboard({ completedLevels, onLaunchLevel, GoMenu }) {
   const renderBranch = (theme, title, emoji, colorClass) => {
     return (
       <div className="flex-1 flex flex-col-reverse gap-4 items-center">
@@ -52,19 +52,32 @@ export default function ProgressionDashboard({ completedLevels, onLaunchLevel, G
 
   return (
     <>
-        <Header onHome={GoMenu} onProgression={handleShowProgression} showHomeButton={false} />
-        <div className="flex-1 flex flex-col p-4 animate-fade-in bg-gray-50 overflow-y-auto relative">
-        <div className="text-center mt-2 mb-8">
-            <h2 className="text-3xl font-black text-blue-900 tracking-tight">Progression</h2>
-            <p className="text-gray-500 font-medium">Réussis un Sans Faute pour avancer Pépette !</p>
+      <div 
+        className="flex-1 flex flex-col p-4 animate-fade-in bg-gray-50 overflow-y-auto relative w-full custom-scrollbar" 
+        style={{ 
+          paddingTop: '10px',    
+          paddingBottom: '20px'  
+        }}
+      >
+        {/* Ton bouton Retour est de retour ! */}
+        <button 
+          onClick={GoMenu} 
+          className="absolute top-4 left-4 text-navy-blue-500 font-bold py-2 px-4 bg-white rounded-lg shadow-sm z-10 active:scale-95 transition-transform"
+        >
+          🠤
+        </button>
+
+        <div className="text-center mt-6 mb-8 shrink-0">
+          <h2 className="text-3xl font-black text-blue-900 tracking-tight">Progression</h2>
+          <p className="text-gray-500 font-medium">Réussis un Sans Faute pour avancer Pépette !</p>
         </div>
 
-        <div className="flex justify-between gap-4 mt-auto">
-            {renderBranch('CINEMA', 'Cinéma', '🎬', 'bg-blue-100 border-blue-500 text-blue-800')}
-            <div className="w-1 bg-gray-300 rounded-full my-10"></div>
-            {renderBranch('LITERATURE', 'Lecture', '📚', 'bg-purple-100 border-purple-500 text-purple-800')}
+        <div className="flex justify-between gap-4 mt-auto shrink-0 px-2">
+          {renderBranch('CINEMA', 'Cinéma', '🎬', 'bg-blue-100 border-blue-500 text-blue-800')}
+          <div className="w-1 bg-gray-300 rounded-full my-10 opacity-50"></div>
+          {renderBranch('LITERATURE', 'Lecture', '📚', 'bg-purple-100 border-purple-500 text-purple-800')}
         </div>
-        </div>
+      </div>
     </>
   )
 }
