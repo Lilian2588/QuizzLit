@@ -7,7 +7,7 @@ export function useGameSession() {
   const [reloadTrigger, setReloadTrigger] = useState(0) // Le compteur pour forcer le rechargement
 
   const { questions, isLoading, error } = useQuestions(gameConfig, reloadTrigger)
-  const engine = useGameEngine(questions)
+  const engine = useGameEngine(questions, gameConfig)
 
   const launchSession = (config) => {
     setGameConfig(config)
@@ -23,7 +23,6 @@ export function useGameSession() {
   // Quitter pour revenir au menu
   const quitSession = () => {
     setGameConfig(null)
-    engine.startGame()
   }
 
   return {

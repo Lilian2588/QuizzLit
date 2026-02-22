@@ -6,3 +6,12 @@ export function shuffleArray(array) {
   }
   return shuffled
 }
+
+export function playAudio(audioPath) {
+  return new Promise((resolve, reject) => {
+    const audio = new Audio(audioPath)
+    audio.onended = () => resolve()
+    audio.onerror = (err) => reject(err)
+    audio.play().catch(reject)
+  })
+}

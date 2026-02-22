@@ -6,7 +6,6 @@ export function useGameEngine(questions) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [score, setScore] = useState(0)
   const [feedback, setFeedback] = useState(null)
-
   // Variables calculées
   const currentQuestion = questions ? questions[currentIndex] : null
 
@@ -40,12 +39,13 @@ export function useGameEngine(questions) {
   }
 
   const nextQuestion = (config) => {
+
     // Si on est à la dernière question, on termine
     if (currentIndex + 1 >= questions.length) {
       onSkipToEnd()
     } 
-    // Si on est en mode progression et qu'on a eu une mauvaise réponse, on termine
-    else if (feedback === 'error' && config && config.mode === "progression") {
+    // La sanction de la progression (1 faute = Game Over)
+    else if (feedback === 'error' && config?.mode === 'progression') {
       onSkipToEnd()
     } 
     else {
@@ -56,11 +56,15 @@ export function useGameEngine(questions) {
 
   // Message de fin personnalisé
   const getMessage = (score) => {
-    if (score === questions.length && questions.length > 0) return "T'es parfaite ! 💍";
-    if (score / questions.length >= 0.5) return "Tu pourrais mieux faire quand même je sais pas ! 🤷‍♂️";
-    return "Culturée, mmmh... laisse moi rire ! 🤠";
+    if (score === questions.length && questions.length > 0) return " T'es parfaite !";
+    if (score / questions.length >= 0.5) return "Tu pourrais mieux faire quand même je sais pas !";
+    return "Culturée, mmmh... laisse moi rire ! ";
   };
-
+  const getReaction = (score) => {
+    if (score === questions.length && questions.length > 0) return "💍";
+    if (score / questions.length >= 0.5) return "🤷🏼‍♂️";
+    return "🤠";
+  };
   const onSkipToEnd = () => {
     // Passer directement à l'écran de fin
     setGameState('finished')
@@ -77,6 +81,7 @@ export function useGameEngine(questions) {
     handleAnswer,
     nextQuestion,
     getMessage,
-    onSkipToEnd 
+    onSkipToEnd, 
+    getReaction
   }
 }
