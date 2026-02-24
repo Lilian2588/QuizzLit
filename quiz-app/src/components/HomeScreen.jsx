@@ -4,7 +4,8 @@ import Header from './Header'
 export default function HomeScreen({ 
   onStart, 
   GoMenu, 
-  handleShowProgression 
+  handleShowProgression,
+  handleOpen,
 }) {
 
   const { mode, setMode, themes, toggleTheme, types, toggleType, submitConfig } = useConfigForm(onStart)
@@ -18,6 +19,7 @@ export default function HomeScreen({
         onHome={GoMenu}
         onProgression={handleShowProgression}
         showHomeButton={false}
+        onSecretTrigger={handleOpen}
       />
       <div className="flex-1 flex flex-col p-6 animate-fade-in overflow-y-auto">
         <div className="text-center mb-8 mt-4">

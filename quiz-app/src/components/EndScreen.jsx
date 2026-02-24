@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import Header from './Header'
 import { playAudio } from '../utils/tools'
+import { useUserRole } from '../hooks/useUserRole'
 
 import audioFinDePalier from '../assets/audios/FinDePalier.mp3'
-
 
 export default function EndScreen({ 
   score, total, onReplay, GoMenu, 
@@ -11,6 +11,7 @@ export default function EndScreen({
   hasNextLevel, onNextLevel, handleShowProgression, getMessage, getReaction,
   goToEndProgressionScreen
 }) {
+  const { isSuper } = useUserRole()
   const isPerfect = score === total && total > 0;
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function EndScreen({
 
   useEffect(() => {
     // Lancer l'audio automatiquement quand le thème est terminé (score parfait en mode progression)
-    if (isPerfect && levelId) {
+    if (isPerfect && levelId && isSuper) {
       playAudio(audioFinDePalier)
     }
   }, [isPerfect, levelId])
@@ -30,12 +31,12 @@ export default function EndScreen({
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in" style={{ paddingTop: '15px' }}>
         
         {isPerfect && levelId ? (
-          <div className="text-6xl mb-4 drop-shadow-md animate-bounce">👩🏻✨</div>
+          <div className="text-6xl mb-4 drop-shadow-md animate-bounce">{isSuper ? '👩🏻✨' : '🎉'}</div>
         ) : (
-          <div className="text-6xl mb-4 mt-2 drop-shadow-md">{getReaction(score)}</div>
+          <div className="text-6xl mb-4 mt-2 drop-shadow-md">{getReaction(score, isSuper)}</div>
         )}
         
-        <h2 className="text-2xl font-extrabold text-gray-800 mb-2">{getMessage(score)}</h2>
+        <h2 className="text-2xl font-extrabold text-gray-800 mb-2">{getMessage(score, isSuper)}</h2>
         
         {isPerfect && levelId && (
           <p className="text-green-600 font-bold mb-4 bg-green-100 p-2 rounded-lg">
@@ -70,7 +71,7 @@ export default function EndScreen({
               onClick={goToEndProgressionScreen}
               className="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-black py-4 rounded-xl transition-all shadow-md active:scale-95 text-lg border-2 border-yellow-500"
             >
-              😏 Terminer le thème
+              {isSuper ? '😏 Terminer le thème' : '✅ Terminer le thème'}
             </button>
           )}
 

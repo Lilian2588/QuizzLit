@@ -1,9 +1,10 @@
 // On importe la structure partagée !
 import { PROGRESSION_STRUCTURE } from '../hooks/useAppLogic' 
-import Header from './Header'
+import { useUserRole } from '../hooks/useUserRole'
 
 
 export default function ProgressionDashboard({ completedLevels, onLaunchLevel, GoMenu }) {
+  const { isSuper } = useUserRole()
   const renderBranch = (theme, title, emoji, colorClass) => {
     return (
       <div className="flex-1 flex flex-col-reverse gap-4 items-center">
@@ -37,7 +38,7 @@ export default function ProgressionDashboard({ completedLevels, onLaunchLevel, G
               `}
             >
               {isCurrent && (
-                <span className="absolute -top-6 text-3xl animate-bounce drop-shadow-md z-10">👩🏻</span>
+                <span className="absolute -top-6 text-3xl animate-bounce drop-shadow-md z-10">{isSuper ? '👩🏻' : ''}</span>
               )}
               <span>{step.label}</span>
               <span className="text-xl mt-1">
@@ -69,7 +70,7 @@ export default function ProgressionDashboard({ completedLevels, onLaunchLevel, G
 
         <div className="text-center mt-6 mb-8 shrink-0">
           <h2 className="text-3xl font-black text-blue-900 tracking-tight">Progression</h2>
-          <p className="text-gray-500 font-medium">Réussis un Sans Faute pour avancer Pépette !</p>
+          <p className="text-gray-500 font-medium">Réussis un Sans Faute pour avancer {isSuper ? 'Pépette !' : '!'}</p>
         </div>
 
         <div className="flex justify-between gap-4 mt-auto shrink-0 px-2">

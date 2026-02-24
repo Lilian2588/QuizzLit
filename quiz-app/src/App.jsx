@@ -1,4 +1,5 @@
 import { useAppLogic } from './hooks/useAppLogic'
+import NokeyScreen from './components/NokeyScreen'
 import HomeScreen from './components/HomeScreen'
 import ProgressionDashboard from './components/ProgressionDashboard'
 import GameScreen from './components/GameScreen'
@@ -6,24 +7,31 @@ import EndScreen from './components/EndScreen'
 import EndProgressionScreen from './components/EndProgressionScreen'
 
 function App() {
-  // 100% de la logique est ici, dans un seul Hook !
   const {
-    gameConfig, isLoading, error, questions, engine,
-    completedLevels, markLevelCompleted, showMap, showEndProgression,
+    gameConfig, isLoading, error, questions, engine, 
+    completedLevels, markLevelCompleted, showMap, showEndProgression, showNokeyScreen,
     handleHomeStart, handleLaunchFromMap, handleReturnToMenu, replaySession,
-    hasNextLevel, handleNextLevel, handleShowProgression, goToEndProgressionScreen
+    hasNextLevel, handleNextLevel, handleShowProgression, goToEndProgressionScreen, onClose, handleOpen
   } = useAppLogic()
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 font-sans">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden min-h-[600px] flex flex-col relative border border-gray-100">
-        
+      
+        {/* 0. LA PAGE SECRÈTE */}
+        {showNokeyScreen && (
+          <NokeyScreen 
+            onClose={onClose}
+          />
+        )}
+
         {/* 1. ACCUEIL */}
-        {!gameConfig && !showMap && !showEndProgression &&(
+        {!showNokeyScreen && !gameConfig && !showMap && !showEndProgression &&(
           <HomeScreen 
             onStart={handleHomeStart} 
             GoMenu={handleReturnToMenu}
             handleShowProgression={handleShowProgression}
+            handleOpen={handleOpen}
           />
         )}
 

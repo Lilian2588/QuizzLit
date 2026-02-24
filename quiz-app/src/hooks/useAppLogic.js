@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useGameSession } from './useGameSession'
 import { useProgression } from './useProgression'
 
@@ -17,7 +17,17 @@ export function useAppLogic() {
   const { completedLevels, markLevelCompleted } = useProgression()
   const [showMap, setShowMap] = useState(false)
   const [showEndProgression, setShowEndProgression] = useState(false)
+  const [showNokeyScreen, setShowNokeyScreen] = useState(false)
   
+  const onClose = () => setShowNokeyScreen(false)
+  const handleOpen = () => setShowNokeyScreen(true)
+
+  // On écoute le signal envoyé par l'appui long
+  useEffect(() => {
+    window.addEventListener('openNokeyScreen', handleOpen)
+    return () => window.removeEventListener('openNokeyScreen', handleOpen)
+  }, [])
+
   const handleShowProgression = () => {
     quitSession() 
     setShowEndProgression(false)
@@ -83,6 +93,6 @@ export function useAppLogic() {
     completedLevels, markLevelCompleted, showMap,
     handleHomeStart, handleLaunchFromMap, handleReturnToMenu, replaySession,
     hasNextLevel, handleNextLevel, handleShowProgression,
-    showEndProgression, goToEndProgressionScreen
+    showEndProgression, goToEndProgressionScreen, showNokeyScreen, onClose, handleOpen
   }
 }
