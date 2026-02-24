@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export function useProgression() {
   // On charge les données sauvegardées (ou un objet vide par défaut)
@@ -12,16 +12,21 @@ export function useProgression() {
     localStorage.setItem('quiz_progression', JSON.stringify(completedLevels))
   }, [completedLevels])
 
-  // Fonction pour valider un niveau (appelée quand score == total)
-  const markLevelCompleted = (levelId) => {
-    setCompletedLevels(prev => ({
-      ...prev,
-      [levelId]: true
-    }))
-  }
+  const markLevelCompleted = useCallback((levelId) => {
+    setCompletedLevels(prev => {
+      // Si le niveau est DÉJÀ enregistré comme terminé, on ne change rien !
+      if (prev[levelId]) {
+        return prev; 
+      }
+      return {
+        ...prev,
+        [levelId]: true
+      }
+    })
+  }, [])
 
   // Fonction pour réinitialiser (optionnel, pour les tests)
-  const resetProgression = () => setCompletedLevels({})
+  const resetProgression = useCallback(() => setCompletedLevels({}), [])
 
   return { completedLevels, markLevelCompleted, resetProgression }
 }

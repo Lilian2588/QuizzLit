@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Header from './Header'
-import { playAudio } from '../utils/tools'
+import { playAudio,  getSecureMediaUrl } from '../utils/tools'
 import { useUserRole } from '../hooks/useUserRole'
 import confetti from 'canvas-confetti'
 
@@ -18,35 +18,18 @@ export default function EndProgressionScreen({
 
   const [isLoading, setIsLoading] = useState(!!(isSuper && secretKey))
 
-  const fetchSecureMedia = async (filename) => {
-    try {
-      // Demander médias sécurisés au serveur
-      const res = await fetch('/api/getUrl', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: secretKey, filename: filename})
-      })
-      if (!res.ok) throw new Error(`Erreur API: status ${res.status}`)
-      const data = await res.json() // On retourne les données (URL signée) au composant
-      return data
-    } catch (err) {
-      console.error("Impossible de récupérer le média sécurisé", err)
-      return null
-    }
-  }
-  
   useEffect(() => {
     const loadSuperMedia = async () => {
       if (isSuper && secretKey) {
         setIsLoading(true) 
         const [imageData, audioData] = await Promise.all([
-          fetchSecureMedia('images/bravo-photo.jpeg'), 
-          fetchSecureMedia('audios/bravo.mp3')
+          getSecureMediaUrl('images/bravo-photo.jpeg', secretKey), 
+          getSecureMediaUrl('audios/bravo.mp3', secretKey)
         ])
-        if (imageData && imageData.signedUrl) setSecureImage(imageData.signedUrl)
-        if (audioData && audioData.signedUrl) setSecureAudio(audioData.signedUrl)
+        if (imageData) setSecureImage(imageData)
+        if (audioData) setSecureAudio(audioData)
         setIsLoading(false)
-        if (imageData && imageData.signedUrl) {
+        if (imageData) {
           confetti({
             particleCount: 300, // Nombre de confettis
             spread: 100,         // L'angle de l'explosion

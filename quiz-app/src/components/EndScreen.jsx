@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Header from './Header'
-import { playAudio } from '../utils/tools'
+import { playAudio,  getSecureMediaUrl } from '../utils/tools'
 import { useUserRole } from '../hooks/useUserRole'
-
-import audioFinDePalier from '../assets/audios/FinDePalier.mp3'
 
 export default function EndScreen({ 
   score, total, onReplay, GoMenu, 
@@ -11,20 +9,35 @@ export default function EndScreen({
   hasNextLevel, onNextLevel, handleShowProgression, getMessage, getReaction,
   goToEndProgressionScreen
 }) {
-  const { isSuper } = useUserRole()
+  const { isSuper, secretKey } = useUserRole()
   const isPerfect = score === total && total > 0;
-
+  const [isLoading, setIsLoading] = useState(!!(isPerfect && levelId && isSuper && secretKey))
   useEffect(() => {
     if (isPerfect && levelId) markLevelCompleted(levelId);
   }, [isPerfect, levelId, markLevelCompleted])
 
   useEffect(() => {
-    // Lancer l'audio automatiquement quand le thème est terminé (score parfait en mode progression)
-    if (isPerfect && levelId && isSuper) {
-      playAudio(audioFinDePalier)
+    const loadSuperMedia = async () => {
+      if (isPerfect && levelId && isSuper && secretKey) {
+        setIsLoading(true) 
+        const url = await getSecureMediaUrl('audios/FinDePalier.mp3', secretKey)
+        if (url) playAudio(url)
+        setIsLoading(false)
+      }
     }
+    loadSuperMedia()
   }, [isPerfect, levelId])
-
+  if (isLoading) {
+    return (
+      <>
+        <Header onHome={GoMenu} onProgression={handleShowProgression} showHomeButton={false} />
+        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-pulse" style={{ paddingTop: '100px' }}>
+          <div className="text-4xl mb-4">⏳</div>
+          <p className="font-bold text-gray-500">Is Loading fort laaa</p>
+        </div>
+      </>
+    )
+  }
   return (
     <>
       <Header onHome={GoMenu} onProgression={handleShowProgression} showHomeButton={false}  />
