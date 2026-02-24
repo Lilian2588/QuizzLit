@@ -18,7 +18,7 @@ export default function GameScreen({
 }) {
   // Petit bonus UX : Si la question est une longue citation (Expert), on adapte le style
   const isLongText = currentQuestion.content_payload.length > 150
-
+    
   return (
     <>
       <Header 

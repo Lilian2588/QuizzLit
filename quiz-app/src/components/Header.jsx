@@ -1,11 +1,23 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
-export default function Header({ onHome, onProgression, showHomeButton}) {
+export default function Header({ onHome, onProgression, showHomeButton, onSecretTrigger }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pressTimer = useRef(null)  
+
+  const handleTimer = () => {
+    if (!onSecretTrigger) return
+    pressTimer.current = setTimeout(() => {
+      onSecretTrigger()
+    }, 0)
+  }
+
+  const CancelTimer= () => {
+    if (pressTimer.current) clearTimeout(pressTimer.current)
+  }
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu = () => setIsMenuOpen(false)
-
+  
   return (
     <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
       <div className="max-w-md mx-auto px-4 py-3">
@@ -47,8 +59,17 @@ export default function Header({ onHome, onProgression, showHomeButton}) {
               </button>
             </div>
 
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-bold">𝒬</span>
+            {/* Nokey Page */}
+            <div 
+              onTouchStart={handleTimer}
+              onTouchEnd={CancelTimer}
+              onMouseDown={handleTimer}
+              onMouseUp={CancelTimer}
+              onMouseLeave={CancelTimer}
+              className={`w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center transition-transform select-none touch-none ${onSecretTrigger ? 'cursor-pointer active:scale-90' : ''}`}
+              style={{ WebkitTouchCallout: 'none' }}
+            >
+              <span className="text-white text-sm font-bold pointer-events-none">𝒬</span>
             </div>
             <div>
               <h1 className="text-lg font-black text-blue-900">𝒬𝓊𝒾𝔃𝔃𝓛𝒾𝓉</h1>

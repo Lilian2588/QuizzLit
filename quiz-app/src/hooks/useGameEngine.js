@@ -55,15 +55,15 @@ export function useGameEngine(questions) {
   }
 
   // Message de fin personnalisé
-  const getMessage = (score) => {
-    if (score === questions.length && questions.length > 0) return " T'es parfaite !";
-    if (score / questions.length >= 0.5) return "Tu pourrais mieux faire quand même je sais pas !";
-    return "Culturée, mmmh... laisse moi rire ! ";
+  const getMessage = (score, superMode) => {
+    if (score === questions.length && questions.length > 0) return superMode ? " T'es parfaite !" : " Nice !";
+    if (score / questions.length >= 0.5) return superMode ? "Tu pourrais mieux faire quand même je sais pas !" : "ça peut être encore mieux !";
+    return superMode ? "Culturée, mmmh... laisse moi rire !" : "Dommage essaies encore ! ";
   };
-  const getReaction = (score) => {
-    if (score === questions.length && questions.length > 0) return "💍";
-    if (score / questions.length >= 0.5) return "🤷🏼‍♂️";
-    return "🤠";
+  const getReaction = (score, superMode) => {
+    if (score === questions.length && questions.length > 0) return superMode ? "💍" : "🤓";
+    if (score / questions.length >= 0.5) return superMode ? "🤷🏼‍♂️" : "🤗";
+    return superMode ? "🤠" : "🤔";
   };
   const onSkipToEnd = () => {
     // Passer directement à l'écran de fin

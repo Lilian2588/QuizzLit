@@ -1,7 +1,11 @@
 import { getRandomFeedback } from '../utils/feedbackMessages'
+import { useUserRole } from '../hooks/useUserRole'
 
 export default function FeedbackScreen({ isSuccess, correctAnswer, onNext }) {
-  const feedbackMessage = getRandomFeedback(isSuccess)
+  const { isSuper } = useUserRole()
+
+  const feedbackMessage = getRandomFeedback(isSuccess, isSuper)
+  
 
   return (
     <div className={`mt-6 p-6 rounded-xl border-2 text-center animate-fade-in ${
