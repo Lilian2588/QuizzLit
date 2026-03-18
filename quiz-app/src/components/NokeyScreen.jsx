@@ -79,7 +79,7 @@ export default function NokeyScreen({ onClose }) {
                 </p>
 
                 <p>
-                    Montre-moi que t'es bien une personne ultraaaa culturée (ou pas 🤠). Y'aura peut-être des refs à "Des Souris et des Hommes", qui sait.
+                    Montre-moi que t'es bien une personne ultra culturée (ou pas 🤠). Y'aura peut-être des refs à "Des Souris et des Hommes", qui sait.
                 </p>
 
                 {/* La signature alignée à droite */}
@@ -94,7 +94,7 @@ export default function NokeyScreen({ onClose }) {
             onClick={onClose} 
             className="w-full bg-pink-500 hover:bg-pink-600 text-white text-lg font-black py-4 rounded-xl transition-all shadow-md shadow-pink-200 active:scale-95 border-2 border-pink-600"
           >
-            🚀 Goooo
+            Goooo 🚀 
           </button>
         </div>
       )}

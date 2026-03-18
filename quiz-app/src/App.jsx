@@ -74,6 +74,8 @@ function App() {
             GoMenu={handleReturnToMenu} 
             handleShowProgression={handleShowProgression}
             onSkipToEnd={engine.onSkipToEnd}
+            showExplanation={engine.showExplanation}
+            setShowExplanation={engine.setShowExplanation}
           />
         )}
 

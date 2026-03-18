@@ -32,9 +32,31 @@ const FEEDBACK_MESSAGES2 = {
   ]
 }
 
-export function getRandomFeedback(isCorrect, feedbackType = true) {
+const FEEDBACK_MESSAGES_SUPER = {
+  correct: [
+  "Au moins tu me connais un peu...",
+  "Bouche bée... bée...😏",
+  "Je voulais te piéger mais bon",
+  "Sacrée mémoire 🧠",
+  "Merci ! 🥹",
+  "Comment tu saisssss ?! 😱"
+  ],
+  incorrect: [
+  "Faut qu'on apprenne un peu plus à se connaître je pense",
+  "En vrai je pense une question comme ça j'aurais pas su non plus...",
+  "Une info de plus à ajouter à ta culture générale ! 👨🏻",
+  "Bbbbb !!!!!",
+  "Presque presque... mais pas tout à fait 🤓"
+  ]
+}
+
+export function getRandomFeedback(isCorrect, feedbackSuper, isPerso) {
   const category = isCorrect ? 'correct' : 'incorrect'
-  const messages = feedbackType === true ? FEEDBACK_MESSAGES[category] : FEEDBACK_MESSAGES2[category]
+  const messages = (isPerso && feedbackSuper) 
+    ? FEEDBACK_MESSAGES_SUPER[category] 
+    : feedbackSuper 
+      ? FEEDBACK_MESSAGES[category] 
+      : FEEDBACK_MESSAGES2[category]; 
   const randomIndex = Math.floor(Math.random() * messages.length)
   return messages[randomIndex]
 }

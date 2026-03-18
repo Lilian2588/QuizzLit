@@ -65,7 +65,7 @@ export default function ProgressionDashboard({ completedLevels, onLaunchLevel, G
           onClick={GoMenu} 
           className="absolute top-4 left-4 text-navy-blue-500 font-bold py-2 px-4 bg-white rounded-lg shadow-sm z-10 active:scale-95 transition-transform"
         >
-          🠤
+          ←
         </button>
 
         <div className="text-center mt-6 mb-8 shrink-0">
