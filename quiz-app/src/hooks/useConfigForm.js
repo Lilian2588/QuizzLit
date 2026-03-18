@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import { useUserRole } from '../hooks/useUserRole' 
 
 export function useConfigForm(onStartCallback) {
-  // On peut laisser freestyle par défaut au lancement, c'est sympa
+
+  const { isSuper } = useUserRole()
+
   const [mode, setMode] = useState('freestyle')
-  const [themes, setThemes] = useState(['LITERATURE', 'CINEMA'])
+  const [themes, setThemes] = useState(['PERSO'])
   const [types, setTypes] = useState(['QCM', 'INPUT'])
 
-  // 1. Gestion Intelligente du Mode
   const handleSetMode = (newMode) => {
     setMode(newMode)
     // INVERSION : C'est maintenant en mode PROGRESSION qu'on force la sélection de TOUT
@@ -18,7 +20,7 @@ export function useConfigForm(onStartCallback) {
 
   // 2. Gestion des filtres (Bloquée si progression)
   const toggleTheme = (theme) => {
-    if (mode === 'progression') return // 🔒 Verrouillé en progression
+    if (mode === 'progression') return 
     
     if (themes.includes(theme)) {
       if (themes.length > 1) setThemes(themes.filter(t => t !== theme))
@@ -28,7 +30,7 @@ export function useConfigForm(onStartCallback) {
   }
 
   const toggleType = (type) => {
-    if (mode === 'progression') return // 🔒 Verrouillé en progression
+    if (mode === 'progression') return 
 
     if (types.includes(type)) {
       if (types.length > 1) setTypes(types.filter(t => t !== type))
@@ -38,7 +40,11 @@ export function useConfigForm(onStartCallback) {
   }
 
   const submitConfig = () => {
-    onStartCallback({ mode, themes, types })
+    let finalThemes = [...themes]; 
+    if (isSuper && mode === 'freestyle') {
+      finalThemes.push('PERSO');
+    }
+    onStartCallback({ mode, themes: finalThemes, types });
   }
 
   return {

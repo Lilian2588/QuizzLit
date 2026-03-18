@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import Header from './Header'
-import { playAudio,  getSecureMediaUrl } from '../utils/tools'
+import { playAudio, getSecureMediaUrl } from '../utils/tools'
 import { useUserRole } from '../hooks/useUserRole'
+import { useProgression } from '../hooks/useProgression'
 import confetti from 'canvas-confetti'
 
 export default function EndProgressionScreen({ 
@@ -10,47 +11,54 @@ export default function EndProgressionScreen({
 }) {
   
   const [isPlaying, setIsPlaying] = useState(false)
-  const { isSuper, secretKey } = useUserRole()
-  
-  // États pour stocker les URLs sécurisées temporaires
-  const [secureImage, setSecureImage] = useState(null)
-  const [secureAudio, setSecureAudio] = useState(null)
+  const [isAudioLoading, setIsAudioLoading] = useState(false) 
 
+  const { isSuper, secretKey } = useUserRole()
+  const { completedLevels } = useProgression()
+  
+  const literatureCompleted = Object.keys(completedLevels).filter(k => k.startsWith('LITERATURE')).length >= 6
+  const cinemaCompleted = Object.keys(completedLevels).filter(k => k.startsWith('CINEMA')).length >= 6
+  const completedThemesCount = (literatureCompleted ? 1 : 0) + (cinemaCompleted ? 1 : 0)
+  const isUltimateFinish = completedThemesCount === 2
+
+  const [secureImage, setSecureImage] = useState(null)
   const [isLoading, setIsLoading] = useState(!!(isSuper && secretKey))
 
   useEffect(() => {
     const loadSuperMedia = async () => {
       if (isSuper && secretKey) {
-        setIsLoading(true) 
-        const [imageData, audioData] = await Promise.all([
-          getSecureMediaUrl('images/bravo-photo.jpeg', secretKey), 
-          getSecureMediaUrl('audios/bravo.mp3', secretKey)
-        ])
-        if (imageData) setSecureImage(imageData)
-        if (audioData) setSecureAudio(audioData)
-        setIsLoading(false)
-        if (imageData) {
+        setIsLoading(true)         
+        const imageFilename = isUltimateFinish ? 'images/bravo2-photo.jpeg' : 'images/bravo-photo.jpeg'
+        const imgUrl = await getSecureMediaUrl(imageFilename, secretKey)        
+        if (imgUrl) setSecureImage(imgUrl)
+        setIsLoading(false)        
+        if (imgUrl) {
           confetti({
-            particleCount: 300, // Nombre de confettis
-            spread: 100,         // L'angle de l'explosion
-            origin: { y: 0.6 }, // L'explosion part du milieu/bas de l'écran
-            colors: ['#FBBF24', '#3B82F6', '#10B981', '#EF4444', '#8B5CF6'], // Tes couleurs
-            zIndex: 100         // Pour être sûr qu'ils passent au-dessus du reste
+            particleCount: isUltimateFinish ? 500 : 300,
+            spread: isUltimateFinish ? 160 : 100,         
+            origin: { y: 0.6 }, 
+            colors: ['#FBBF24', '#3B82F6', '#10B981', '#EF4444', '#8B5CF6'], 
+            zIndex: 100         
           })
         }
       }
     }
     loadSuperMedia()
-  }, [isSuper, secretKey])
+  }, [isSuper, secretKey, isUltimateFinish])
 
-    const handlePlayAudio = async () => {
-      if (isPlaying || !secureAudio) return
+  const handlePlayAudio = async () => {
+    if (isPlaying || isAudioLoading) return 
+    setIsAudioLoading(true) 
+    const audioFilename = isUltimateFinish ? 'audios/bravo2.mp3' : 'audios/bravo.mp3'
+    const audioUrl = await getSecureMediaUrl(audioFilename, secretKey)
+    setIsAudioLoading(false)     
+    if (audioUrl) {
       setIsPlaying(true)
-      await playAudio(secureAudio)
+      await playAudio(audioUrl)
       setIsPlaying(false)
     }
+  }
 
-  // --- 1. AFFICHAGE DU CHARGEMENT (Seulement en Super Mode) ---
   if (isLoading) {
     return (
       <>
@@ -62,54 +70,45 @@ export default function EndProgressionScreen({
       </>
     )
   }
+
   return (
     <>
-      <Header onHome={GoMenu} onProgression={handleShowProgression} showHomeButton={false} />
-      
+      <Header onHome={GoMenu} onProgression={handleShowProgression} showHomeButton={false} />      
       <div 
         className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in overflow-y-auto custom-scrollbar"
         style={{ paddingTop: '100px', paddingBottom: '40px' }}
-      >
-        
-        {/* Titre dynamique : Tigre pour elle, Incroyable pour les autres */}
+      >        
         <h2 className="text-3xl font-extrabold text-gray-800 mb-6 mt-4">
-          {secureImage ? "🐯 T'y es un tigre !" : "🎉 Incroyable !"}
+          {!secureImage 
+            ? "🎉 Incroyable !" 
+            : isUltimateFinish 
+              ? "👑 T'es la Reine du Quizz !" 
+              : "🐯 T'y es un tigre !"}
         </h2>
 
-        {/* --- CONTENU SECRET (Seulement si l'image sécurisée a été chargée) --- */}
         {secureImage && (
           <>
-            {/* Photo de l'utilisateur sécurisée */}
-            <div className="w-40 h-40 shrink-0 rounded-full overflow-hidden mb-6 border-4 border-yellow-400 shadow-lg">
-              <img 
-                src={secureImage} 
-                alt="T'y es belle" 
-                className="w-full h-full object-cover"
-              />
+            <div className={`w-40 h-40 shrink-0 rounded-full overflow-hidden mb-6 border-4 shadow-lg ${isUltimateFinish ? 'border-pink-500 shadow-pink-200' : 'border-yellow-400'}`}>
+              <img src={secureImage} alt="T'y es belle" className="w-full h-full object-cover" />
             </div>
-
-            {/* Bouton vocal sécurisé */}
             <button 
               onClick={handlePlayAudio}
-              disabled={!secureAudio} // On grise le bouton si le son n'est pas encore prêt
+              disabled={isAudioLoading || isPlaying} 
               className={`w-16 h-16 shrink-0 rounded-full flex items-center justify-center text-3xl mb-8 transition-all shadow-md active:scale-95 ${
-                isPlaying 
+                isPlaying || isAudioLoading
                   ? 'bg-green-500 text-white animate-pulse' 
-                  : 'bg-yellow-400 hover:bg-yellow-500 text-white'
+                  : isUltimateFinish ? 'bg-pink-500 hover:bg-pink-600 text-white' : 'bg-yellow-400 hover:bg-yellow-500 text-white'
               }`}
             >
-              {isPlaying ? '🔊' : '🎵'}
+              {isAudioLoading ? '⏳' : isPlaying ? '🔊' : '🎵'}
             </button>
           </>
         )}
 
-        {/* --- CONTENU VISITEUR (Si pas de mode Super) --- */}
         {!secureImage && (
           <div className="text-8xl mb-12 drop-shadow-lg">🏆</div>
         )}
 
-        {/* --- BOUTONS COMMUNS --- */}
-        {/* mt-auto pour les pousser vers le bas s'il y a de la place */}
         <div className="w-full flex flex-col gap-3 mt-auto">
           <button 
             onClick={handleShowProgression} 

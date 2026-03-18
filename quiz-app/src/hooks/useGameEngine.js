@@ -6,6 +6,7 @@ export function useGameEngine(questions) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [score, setScore] = useState(0)
   const [feedback, setFeedback] = useState(null)
+  const [showExplanation, setShowExplanation] = useState(false)
   // Variables calculées
   const currentQuestion = questions ? questions[currentIndex] : null
 
@@ -26,7 +27,8 @@ export function useGameEngine(questions) {
     if (currentQuestion.question_type === 'QCM') {
       isCorrect = userValue === currentQuestion.correct_answer_display
     } else {
-      isCorrect = currentQuestion.accepted_inputs.includes(userValue.toLowerCase().trim())
+      let FormattedUserValue = userValue.toLowerCase().trim()
+      isCorrect = currentQuestion.accepted_inputs.includes(FormattedUserValue) || FormattedUserValue === currentQuestion.correct_answer_display.toLowerCase().trim()
     }
 
     // Mise à jour du score et du feedback
@@ -39,15 +41,15 @@ export function useGameEngine(questions) {
   }
 
   const nextQuestion = (config) => {
-
     // Si on est à la dernière question, on termine
+    setShowExplanation(false) 
     if (currentIndex + 1 >= questions.length) {
       onSkipToEnd()
     } 
     // La sanction de la progression (1 faute = Game Over)
     else if (feedback === 'error' && config?.mode === 'progression') {
       onSkipToEnd()
-    } 
+    }    
     else {
       setCurrentIndex(i => i + 1)
     }
@@ -77,11 +79,13 @@ export function useGameEngine(questions) {
     currentIndex,
     score,
     feedback,
+    showExplanation,  
     startGame,
     handleAnswer,
     nextQuestion,
     getMessage,
     onSkipToEnd, 
-    getReaction
+    getReaction,
+    setShowExplanation
   }
 }

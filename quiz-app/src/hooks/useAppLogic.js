@@ -67,24 +67,25 @@ export function useAppLogic() {
     const currentIndex = PROGRESSION_STRUCTURE.findIndex(s => s.diff === diff && s.type === type)
     
     // S'il y a un niveau après nous
-    if (currentIndex >= 0 && currentIndex < PROGRESSION_STRUCTURE.length - 1) {
-      hasNextLevel = true
-      const nextStep = PROGRESSION_STRUCTURE[currentIndex + 1]
-      const nextLevelId = `${theme}_${nextStep.diff}_${nextStep.type}`
-      
-      // La fonction qui lance directement le niveau suivant
-      handleNextLevel = () => {
-        launchSession({
-          mode: 'progression',
-          themes: [theme],
-          types: [nextStep.type],
-          difficulty: nextStep.diff,
-          levelId: nextLevelId
-        })
+    if (currentIndex >= 0) {
+      if (currentIndex < PROGRESSION_STRUCTURE.length - 1) {
+        hasNextLevel = true
+        const nextStep = PROGRESSION_STRUCTURE[currentIndex + 1]
+        const nextLevelId = `${theme}_${nextStep.diff}_${nextStep.type}`
+        
+        // La fonction qui lance directement le niveau suivant
+        handleNextLevel = () => {
+          launchSession({
+            mode: 'progression',
+            themes: [theme],
+            types: [nextStep.type],
+            difficulty: nextStep.diff,
+            levelId: nextLevelId
+          })
+        }
+      } else if (currentIndex === PROGRESSION_STRUCTURE.length) {
+        goToEndProgressionScreen();
       }
-    } else {
-      // C'est le dernier palier du thème - on peut aller à l'écran de fin de progression
-      goToEndProgressionScreen()
     }
   }
 

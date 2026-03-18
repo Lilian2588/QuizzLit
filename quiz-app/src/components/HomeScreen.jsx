@@ -1,5 +1,6 @@
 import { useConfigForm } from '../hooks/useConfigForm'
 import Header from './Header'
+import { useUserRole } from '../hooks/useUserRole'
 
 export default function HomeScreen({ 
   onStart, 
@@ -9,6 +10,8 @@ export default function HomeScreen({
 }) {
 
   const { mode, setMode, themes, toggleTheme, types, toggleType, submitConfig } = useConfigForm(onStart)
+
+  const { isSuper } = useUserRole()
 
   // INVERSION : C'est maintenant Progression qui active le grisage
   const isProgression = mode === 'progression'
@@ -36,7 +39,7 @@ export default function HomeScreen({
               className={`p-4 rounded-xl border-2 transition-all text-left ${isProgression ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'}`}
             >
               <span className="block text-2xl mb-1">📈</span>
-              <span className={`font-bold ${isProgression ? 'text-blue-700' : 'text-gray-700'}`}>Progression</span>
+              <span className={`font-bold ${isProgression ? 'text-blue-700' : 'text-gray-700'}`}>Progression {isSuper ? '👩🏻' : ''}</span>
             </button>
             
             <button 
@@ -55,7 +58,7 @@ export default function HomeScreen({
             Univers {isProgression && <span className="text-xs font-normal text-blue-600 ml-2">(Indisponible en mode Progression)</span>}
           </h3>
           <div className="flex flex-wrap gap-2">
-            {['LITERATURE', 'CINEMA'].map(theme => (
+            {['PERSO'].map(theme => (
               <button
                 key={theme}
                 onClick={() => toggleTheme(theme)}
