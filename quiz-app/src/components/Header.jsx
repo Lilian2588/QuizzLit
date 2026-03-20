@@ -8,7 +8,7 @@ export default function Header({ onHome, onProgression, showHomeButton, onSecret
     if (!onSecretTrigger) return
     pressTimer.current = setTimeout(() => {
       onSecretTrigger()
-    }, 0)
+    }, 5000)
   }
 
   const CancelTimer= () => {

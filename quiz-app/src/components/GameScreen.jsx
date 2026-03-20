@@ -1,4 +1,3 @@
-import Header from './Header'
 import Footer from './Footer'
 import QcmOptions from './QcmOptions'
 import InputForm from './InputForm'
@@ -14,7 +13,6 @@ export default function GameScreen({
   handleAnswer,
   nextQuestion,
   GoMenu,
-  handleShowProgression,
   onSkipToEnd, 
   showExplanation,
   setShowExplanation
@@ -22,12 +20,18 @@ export default function GameScreen({
 
 
   // Petit bonus UX : Si la question est une longue citation (Expert), on adapte le style
-const isCitation = /["']([^"']{50,})["']/.test(currentQuestion.content_payload);  
+const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["']/.test(currentQuestion.content_payload);  
   return (
     <>     
-      <div className="flex-1 flex flex-col p-6 animate-fade-in overflow-y-auto pb-5 custom-scrollbar" style={{ paddingTop: '40px' }}>
+      <div className="flex-1 flex flex-col p-6 animate-fade-in overflow-y-auto pb-5 custom-scrollbar" style={{ paddingTop: '30px' }}>
         
-        {/* Header de la question (Score + Difficulté) */}
+        {/* Header de la question (Score + Difficulté) */}         
+        <div className="flex justify-end mb-2">
+          <button onClick={GoMenu}
+            className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 text-red-700 font-bold px-2 py-1 rounded-lg hover:from-red-100 hover:to-orange-100 transition-all transform hover:scale-105 text-xs">
+            Quitter
+          </button>
+        </div>
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center">
             <div className="flex items-center gap-2 bg-green-50 px-3 py-2 rounded-lg border border-green-200">
@@ -107,9 +111,10 @@ const isCitation = /["']([^"']{50,})["']/.test(currentQuestion.content_payload);
             )}            
           </div>
         )}        
-      </div>
-      {/* Footer avec bouton "Aller à la fin" */}
+      </div>    
+      {/* Footer avec bouton "Aller à la fin" 
       <Footer onSkipToEnd={onSkipToEnd} />
+      */}
     </>
   )
 }
