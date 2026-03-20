@@ -13,6 +13,8 @@ export default function GameScreen({
   handleAnswer,
   nextQuestion,
   GoMenu,
+  handleShowProgression,
+  levelId,
   onSkipToEnd, 
   showExplanation,
   setShowExplanation
@@ -27,7 +29,7 @@ const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["
         
         {/* Header de la question (Score + Difficulté) */}         
         <div className="flex justify-end mb-2">
-          <button onClick={GoMenu}
+          <button onClick={levelId ? handleShowProgression : GoMenu}
             className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 text-red-700 font-bold px-2 py-1 rounded-lg hover:from-red-100 hover:to-orange-100 transition-all transform hover:scale-105 text-xs">
             Quitter
           </button>
