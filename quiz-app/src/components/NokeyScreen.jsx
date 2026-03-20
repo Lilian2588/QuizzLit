@@ -9,7 +9,7 @@ export default function NokeyScreen({ onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (password.toLowerCase().trim() === 'pepette') {
+    if (password === import.meta.env.VITE_APP_ACCESS_KEY) {
       unlockSuperMode(password.trim())
       setStep(2)
     } else {
