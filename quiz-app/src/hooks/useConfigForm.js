@@ -41,7 +41,7 @@ export function useConfigForm(onStartCallback) {
 
   const submitConfig = () => {
     let finalThemes = [...themes]; 
-    if (mode === 'freestyle') {
+    if (isSuper && mode === 'freestyle') {
       finalThemes.push('PERSO');
     }
     onStartCallback({ mode, themes: finalThemes, types });
