@@ -56,7 +56,7 @@ function App() {
         {/* 4. ERREUR (Vide) */}
         {gameConfig && !isLoading && questions.length === 0 && !error && (
           <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-            <p className="text-xl font-bold text-red-500 mb-4">Mmh... Il n'y a pas encore 15 questions dans cette catégorie 😕</p>
+            <p className="text-xl font-bold text-red-500 mb-4">Mmh... Il n'y a pas encore de questions dans cette catégorie 😕</p>
             <button onClick={handleReturnToMenu} className="bg-gray-200 px-6 py-3 rounded-lg font-bold">Retour</button>
           </div>
         )}

@@ -58,7 +58,7 @@ export default function HomeScreen({
             Univers {isProgression && <span className="text-xs font-normal text-blue-600 ml-2">(Indisponible en mode Progression)</span>}
           </h3>
           <div className="flex flex-wrap gap-2">
-            {['PERSO'].map(theme => (
+            {['LITERATURE', 'CINEMA'].map(theme => (
               <button
                 key={theme}
                 onClick={() => toggleTheme(theme)}
