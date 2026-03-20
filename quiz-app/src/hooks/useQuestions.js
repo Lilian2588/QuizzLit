@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useUserRole } from '../hooks/useUserRole'
 import { supabase } from '../supabaseClient'
 
 export function useQuestions(config, reloadTrigger = 0) {
   const [questions, setQuestions] = useState([])
   const [isLoading, setIsLoading] = useState(false) 
   const [error, setError] = useState(null)
+  const { isSuper } = useUserRole()
 
   useEffect(() => {
     if (!config) return
@@ -13,9 +15,15 @@ export function useQuestions(config, reloadTrigger = 0) {
       setIsLoading(true)
       setError(null)
       try {
-        let query = supabase.from('questions').select('*')
+        
+        const currentPassword = isSuper ? import.meta.env.VITE_APP_ACCESS_KEY : ""; 
+        let query = supabase
+          .rpc('fetch_game_questions', {
+            secret_pass: currentPassword
+          });
 
         // Filtres dynamiques
+        console.log(config.themes)
         if (config.themes && config.themes.length > 0) query = query.in('theme', config.themes)
         if (config.types && config.types.length > 0) query = query.in('question_type', config.types)
         
@@ -43,7 +51,7 @@ export function useQuestions(config, reloadTrigger = 0) {
     }
 
     fetchQuestions()
-  }, [config, reloadTrigger])
+  }, [config, isSuper, reloadTrigger])
 
   return { questions, isLoading, error }
 }

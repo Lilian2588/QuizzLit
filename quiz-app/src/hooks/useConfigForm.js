@@ -6,7 +6,7 @@ export function useConfigForm(onStartCallback) {
   const { isSuper } = useUserRole()
 
   const [mode, setMode] = useState('freestyle')
-  const [themes, setThemes] = useState(['PERSO'])
+  const [themes, setThemes] = useState(['LITERATURE', 'CINEMA'])
   const [types, setTypes] = useState(['QCM', 'INPUT'])
 
   const handleSetMode = (newMode) => {
@@ -41,7 +41,7 @@ export function useConfigForm(onStartCallback) {
 
   const submitConfig = () => {
     let finalThemes = [...themes]; 
-    if (isSuper && mode === 'freestyle') {
+    if (mode === 'freestyle') {
       finalThemes.push('PERSO');
     }
     onStartCallback({ mode, themes: finalThemes, types });
