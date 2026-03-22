@@ -1,4 +1,4 @@
-# 📚 QuizzLit - L'Application de Quiz Culturel & Personnalisé
+# 𝒬𝓊𝒾𝔃𝔃𝓛𝒾𝓉 - L'Application de Quiz Culturel & Personnalisé
 
 Bienvenue sur **QuizzLit**, une Web App (PWA) interactive conçue pour tester ses connaissances sur le Cinéma et la Littérature... avec un secret bien gardé ! 🤫
 
