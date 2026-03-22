@@ -26,7 +26,14 @@ export default function HomeScreen({
       />
       <div className="flex-1 flex flex-col p-6 animate-fade-in overflow-y-auto">
         <div className="text-center mb-8 mt-4">
-          <h1 className="text-4xl font-black text-blue-900 mb-2 tracking-tight">𝒬𝓊𝒾𝔃𝔃𝓛𝒾𝓉</h1>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <img 
+              src="/e-book.png" 
+              alt="Logo" 
+              className="w-10 h-10 object-cover pointer-events-none select-none"
+            />
+            <h1 className="text-4xl font-black text-blue-900 tracking-tight">𝒬𝓊𝒾𝔃𝔃𝓛𝒾𝓉</h1>
+          </div>
           <p className="text-gray-500 font-medium">Paramétrez votre partie</p>
         </div>
 

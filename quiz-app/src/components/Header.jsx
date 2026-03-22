@@ -66,10 +66,13 @@ export default function Header({ onHome, onProgression, showHomeButton, onSecret
               onMouseDown={handleTimer}
               onMouseUp={CancelTimer}
               onMouseLeave={CancelTimer}
-              className={`w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center transition-transform select-none touch-none ${onSecretTrigger ? 'cursor-pointer active:scale-90' : ''}`}
-              style={{ WebkitTouchCallout: 'none' }}
+              className={`w-6 h-6 overflow-hidden transition-transform select-none touch-none ${onSecretTrigger ? 'cursor-pointer active:scale-90' : ''}`}              style={{ WebkitTouchCallout: 'none' }}
             >
-              <span className="text-white text-sm font-bold pointer-events-none">𝒬</span>
+              <img 
+                src="/e-book.png" 
+                alt="Logo" 
+                className="object-cover pointer-events-none select-none"
+              />
             </div>
             <div>
               <h1 className="text-lg font-black text-blue-900">𝒬𝓊𝒾𝔃𝔃𝓛𝒾𝓉</h1>
