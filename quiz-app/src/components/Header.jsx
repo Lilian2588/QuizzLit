@@ -66,7 +66,7 @@ export default function Header({ onHome, onProgression, showHomeButton, onSecret
               onMouseDown={handleTimer}
               onMouseUp={CancelTimer}
               onMouseLeave={CancelTimer}
-              className={`w-6 h-6 overflow-hidden transition-transform select-none touch-none ${onSecretTrigger ? 'cursor-pointer active:scale-90' : ''}`}              style={{ WebkitTouchCallout: 'none' }}
+              className={`w-5 h-5 overflow-hidden transition-transform select-none touch-none ${onSecretTrigger ? 'cursor-pointer active:scale-90' : ''}`}              style={{ WebkitTouchCallout: 'none' }}
             >
               <img 
                 src="/e-book.png" 

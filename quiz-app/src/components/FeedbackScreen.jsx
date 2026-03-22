@@ -6,10 +6,10 @@ export default function FeedbackScreen({ isSuccess, correctAnswer, onNext, curre
   const feedbackMessage = getRandomFeedback(isSuccess, isSuper, currentThemeQuestion === 'PERSO')
 
   return (
-    <div className={`absolute left-4 right-4 bottom-4 max-w-md mx-auto p-6 rounded-xl border-2 text-center animate-fade-in ${
+    <div className={`absolute left-4 right-4 bottom-4 p-6 rounded-xl border-2 text-center animate-fade-in ${
       isSuccess ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
-    }`}
-    style={{ zIndex: 10 }}
+      }`}
+      style={{ zIndex: 10 }}
     >
       
       <h3 className={`text-xl font-extrabold mb-1 ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>

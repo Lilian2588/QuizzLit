@@ -30,7 +30,7 @@ export default function HomeScreen({
             <img 
               src="/e-book.png" 
               alt="Logo" 
-              className="w-10 h-10 object-cover pointer-events-none select-none"
+              className="w-8 h-8 object-cover pointer-events-none select-none"
             />
             <h1 className="text-4xl font-black text-blue-900 tracking-tight">𝒬𝓊𝒾𝔃𝔃𝓛𝒾𝓉</h1>
           </div>
