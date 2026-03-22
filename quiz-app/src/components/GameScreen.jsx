@@ -74,7 +74,7 @@ const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["
         
         {/* LE FEEDBACK EN OVERLAY  */}
         {feedback && !showExplanation && (
-        <div className="fixed bottom-1/3 left-1/2 -translate-x-1/2 w-10/11 z-[100] animate-slide-up shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+        <div className="fixed bottom-1/3 left-1/2 -translate-x-1/2 w-10/11 max-w-md z-[100] animate-slide-up shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
           <FeedbackScreen 
             isSuccess={feedback === 'success'}
             correctAnswer={currentQuestion.correct_answer_display}

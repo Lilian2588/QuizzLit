@@ -17,8 +17,9 @@ export function playAudio(audioPath) {
 }
 
 export const getSecureMediaUrl = async (filename, secretKey) => {
+  const apiUrl = "/api/getUrl"
   try {
-    const res = await fetch('/api/getUrl', {
+    const res = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password: secretKey, filename: filename })
