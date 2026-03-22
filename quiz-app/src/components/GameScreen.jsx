@@ -2,6 +2,7 @@ import Footer from './Footer'
 import QcmOptions from './QcmOptions'
 import InputForm from './InputForm'
 import FeedbackScreen from './FeedbackScreen'
+import { useUserRole } from '../hooks/useUserRole'
 
 
 export default function GameScreen({
@@ -19,10 +20,10 @@ export default function GameScreen({
   showExplanation,
   setShowExplanation
 }) {
-
+  const { isSuper } = useUserRole()
 
   // Petit bonus UX : Si la question est une longue citation (Expert), on adapte le style
-const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["']/.test(currentQuestion.content_payload);  
+  const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["']/.test(currentQuestion.content_payload);  
   return (
     <>     
       <div className="flex-1 flex flex-col p-6 animate-fade-in overflow-y-auto pb-5 custom-scrollbar" style={{ paddingTop: '30px' }}>
@@ -85,7 +86,7 @@ const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["
         )}
           
         {/* --- ZONE D'EXPLICATION --- */}
-        {feedback !== null && currentQuestion.explanation && (
+        {isSuper && feedback !== null && currentQuestion.explanation && (
           <div className="mt-6 flex flex-col items-center w-full max-w-md mx-auto relative z-50">
             {!showExplanation ? (
               <button 
