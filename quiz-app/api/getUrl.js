@@ -4,9 +4,8 @@ import { createClient } from '@supabase/supabase-js'
 export default async function handler(req, res) {
   // On récupère le mot de passe envoyé par le site
   const { password, filename } = req.body
-
   // On vérifie si c'est le bon mot de passe (Défini dans Vercel)
-  if (password !== process.env.APP_ACCESS_KEY) {
+  if (password !== process.env.VITE_APP_ACCESS_KEY) {    
     return res.status(401).json({ error: 'Mot de passe incorrect' })
   }
 

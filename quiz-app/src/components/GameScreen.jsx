@@ -2,6 +2,7 @@ import Footer from './Footer'
 import QcmOptions from './QcmOptions'
 import InputForm from './InputForm'
 import FeedbackScreen from './FeedbackScreen'
+import { useUserRole } from '../hooks/useUserRole'
 
 
 export default function GameScreen({
@@ -13,21 +14,23 @@ export default function GameScreen({
   handleAnswer,
   nextQuestion,
   GoMenu,
+  handleShowProgression,
+  levelId,
   onSkipToEnd, 
   showExplanation,
   setShowExplanation
 }) {
-
+  const { isSuper } = useUserRole()
 
   // Petit bonus UX : Si la question est une longue citation (Expert), on adapte le style
-const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["']/.test(currentQuestion.content_payload);  
+  const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["']/.test(currentQuestion.content_payload);  
   return (
     <>     
       <div className="flex-1 flex flex-col p-6 animate-fade-in overflow-y-auto pb-5 custom-scrollbar" style={{ paddingTop: '30px' }}>
         
         {/* Header de la question (Score + Difficulté) */}         
         <div className="flex justify-end mb-2">
-          <button onClick={GoMenu}
+          <button onClick={levelId ? handleShowProgression : GoMenu}
             className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 text-red-700 font-bold px-2 py-1 rounded-lg hover:from-red-100 hover:to-orange-100 transition-all transform hover:scale-105 text-xs">
             Quitter
           </button>
@@ -72,7 +75,7 @@ const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["
         
         {/* LE FEEDBACK EN OVERLAY  */}
         {feedback && !showExplanation && (
-        <div className="fixed bottom-1/3 left-1/2 -translate-x-1/2 w-full max-w-md z-[100] animate-slide-up shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+        <div className="fixed bottom-1/3 left-1/2 -translate-x-1/2 w-10/11 max-w-md z-[100] animate-slide-up shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
           <FeedbackScreen 
             isSuccess={feedback === 'success'}
             correctAnswer={currentQuestion.correct_answer_display}
@@ -83,7 +86,7 @@ const isCitation = currentQuestion.content_payload >= 150 || /["']([^"']{55,})["
         )}
           
         {/* --- ZONE D'EXPLICATION --- */}
-        {feedback !== null && currentQuestion.explanation && (
+        {isSuper && feedback !== null && currentQuestion.explanation && (
           <div className="mt-6 flex flex-col items-center w-full max-w-md mx-auto relative z-50">
             {!showExplanation ? (
               <button 

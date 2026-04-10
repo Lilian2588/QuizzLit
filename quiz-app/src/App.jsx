@@ -72,6 +72,8 @@ function App() {
             handleAnswer={engine.handleAnswer}
             nextQuestion={() => engine.nextQuestion(gameConfig)}
             GoMenu={handleReturnToMenu} 
+            handleShowProgression={handleShowProgression}
+            levelId={gameConfig.levelId}
             onSkipToEnd={engine.onSkipToEnd}
             showExplanation={engine.showExplanation}
             setShowExplanation={engine.setShowExplanation}

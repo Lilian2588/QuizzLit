@@ -23,7 +23,6 @@ export function useQuestions(config, reloadTrigger = 0) {
           });
 
         // Filtres dynamiques
-        console.log(config.themes)
         if (config.themes && config.themes.length > 0) query = query.in('theme', config.themes)
         if (config.types && config.types.length > 0) query = query.in('question_type', config.types)
         
