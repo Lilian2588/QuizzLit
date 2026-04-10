@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { normalize } from '../utils/tools'
 
 export function useGameEngine(questions) {
   // --- 1. LES ÉTATS DU JEU ---
@@ -27,8 +28,8 @@ export function useGameEngine(questions) {
     if (currentQuestion.question_type === 'QCM') {
       isCorrect = userValue === currentQuestion.correct_answer_display
     } else {
-      let FormattedUserValue = userValue.toLowerCase().trim()
-      isCorrect = currentQuestion.accepted_inputs.includes(FormattedUserValue) || FormattedUserValue === currentQuestion.correct_answer_display.toLowerCase().trim()
+      let formatted = normalize(userValue);   
+      isCorrect = currentQuestion.accepted_inputs.map(v => normalize(v)).includes(formatted) || formatted === normalize(currentQuestion.correct_answer_display);
     }
 
     // Mise à jour du score et du feedback

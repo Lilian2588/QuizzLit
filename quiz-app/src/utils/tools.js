@@ -31,3 +31,13 @@ export const getSecureMediaUrl = async (filename, secretKey) => {
     return null
   }
 }
+
+export function normalize(str) {
+  return str
+    .normalize("NFKD")
+    .replace(/[\u2019\u2018\u2032\u00B4\u0060]/g, "'") // remplace les apostrophes variées
+    .toLowerCase()
+    .trim();
+}
+
+
